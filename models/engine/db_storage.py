@@ -75,7 +75,6 @@ class DBStorage:
         """call remove() method on the private session attribute"""
         self.__session.remove()
 
-
     def get(self, cls, id):
         """
         return the object on the class name
@@ -90,8 +89,8 @@ class DBStorage:
         count the number of object
         """
         all_class = classes.values()
-        if not cls :
-            count = 0 
+        if not cls:
+            count = 0
             for cl in all_class:
                 count += len(models.storage.all(cl).values())
             else:
