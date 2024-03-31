@@ -71,30 +71,16 @@ class FileStorage:
 
     def get(self, cls, id):
         """
-        Returns the object based on the class name and its ID, or
-        None if not found
+            retrieves one object based on class name and id
         """
-        if cls not in classes.values():
-            return None
-
-        all_cls = models.storage.all(cls)
-        for value in all_cls.values():
-            if (value.id == id):
-                return value
-
+        if cls in FileStorage.CNC.values() and id:
+            fetch_obj = "{}.{}".format(cls.__name__, id)
+            all_obj = self.all(cls)
+            return all_obj.get(fetch_obj)
         return None
 
     def count(self, cls=None):
         """
-        count the number of objects in storage
+        count of all objects in storage
         """
-        all_class = classes.values()
-
-        if not cls:
-            count = 0
-            for clas in all_class:
-                count += len(models.storage.all(clas).values())
-        else:
-            count = len(models.storage.all(cls).values())
-
-        return count
+        return (len(self.all(cls)))
