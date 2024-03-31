@@ -17,7 +17,7 @@ import sqlalchemy
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
-CNC  = {"Amenity": Amenity, "City": City,
+classes  = {"Amenity": Amenity, "City": City,
            "Place": Place, "Review": Review, "State": State, "User": User}
 
 
@@ -78,24 +78,30 @@ class DBStorage:
 
     def get(self, cls, id):
         """
-        fetches specific object
-        :param cls: class of object as string
-        :param id: id of object as string
-        :return: found object or None
+        Returns the object based on the class name and its ID, or
+        None if not found
         """
-        all_class = self.all(cls)
+        if cls not in classes.values():
+            return None
 
-        for obj in all_class.values():
-            if id == str(obj.id):
-                return obj
+        all_cls = models.storage.all(cls)
+        for value in all_cls.values():
+            if (value.id == id):
+                return value
 
         return None
 
     def count(self, cls=None):
         """
-        count of how many instances of a class
-        :param cls: class name
-        :return: count of instances of a class
+        count the number of objects in storage
         """
-        return len(self.all(cls))
+        all_class = classes.values()
 
+        if not cls:
+            count = 0
+            for clas in all_class:
+                count += len(models.storage.all(clas).values())
+        else:
+            count = len(models.storage.all(cls).values())
+
+        return count

@@ -70,17 +70,14 @@ class FileStorage:
         self.reload()
 
     def get(self, cls, id):
-        """
-            retrieves one object based on class name and id
-        """
-        if cls in FileStorage.CNC.values() and id:
-            fetch_obj = "{}.{}".format(cls.__name__, id)
-            all_obj = self.all(cls)
-            return all_obj.get(fetch_obj)
-        return None
+        """Retrieve one object"""
+        key = "{}.{}".format(cls.__name__, id)
+        return self.__objects.get(key)
 
     def count(self, cls=None):
-        """
-        count of all objects in storage
-        """
-        return (len(self.all(cls)))
+        """Count the number of objects in storage"""
+        if cls:
+            return len([obj for obj in self.__objects.values()
+                        if obj.__class__ == cls])
+        else:
+            return len(self.__objects)
